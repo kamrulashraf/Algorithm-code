@@ -1976,3 +1976,76 @@ bool miller_rabin(unsigned long long p, int it){
     return true;
 }
 
+MO ALGO :::::::::::::::::::: MO ALGO
+
+int a[N] , res[N];
+int block;
+int mark[N];
+struct query
+{
+   int l , r , in;
+} arr[N];
+ 
+ 
+bool cmp(query &aa , query &bb){
+    int tempa = aa.l/block;
+    int tempb = bb.l/block;
+    if(tempa == tempb) return aa.r < bb.r;
+    return tempa < tempb;
+}
+ 
+ 
+int add(int indx){
+   mark[a[indx]]++;
+   return mark[a[indx]] == 1;
+}
+ 
+int remove(int indx){
+   mark[a[indx]]--;
+   return mark[a[indx]]==0;
+}
+int main()
+{
+    int n;
+    cin >> n;
+ 
+    block = sqrt(n);
+ 
+ 
+    for(int i = 1 ; i<= n ; i++){
+         sca(a[i]);
+    }
+ 
+//    F(i,n) cout << a[i+1] << ' ';
+//    cout << endl;
+ 
+    int q;
+    sca(q);
+    F(i,q){
+       scaa(arr[i].l,arr[i].r);
+       arr[i].in = i;
+    }
+ 
+ 
+    sort(arr,arr+q,cmp);
+ 
+//    F(i,q) cout << arr[i].l << ' ' << arr[i].r << endl;
+//    cout << "****************" << endl;
+//    cout << q << endl;
+ 
+    int sum = 0 , l = 0 , r = 0;
+    for(int i = 0 ; i< q ; i++){
+       while(l > arr[i].l) sum  += add(--l);
+       while(l < arr[i].l) sum -=  remove(l++);
+       while(r > arr[i].r) sum -= remove(r--);
+       while(r < arr[i].r) sum += add(++r);
+       res[arr[i].in] = sum;
+ 
+//       cout << l << ' ' << r << ' '  << sum << ' ' << arr[i].l << ' ' << arr[i].r <<  endl;
+    }
+ 
+    for(int i = 0 ; i<  q ; i++){
+        printf("%d\n",res[i]);
+    }
+ 
+}
